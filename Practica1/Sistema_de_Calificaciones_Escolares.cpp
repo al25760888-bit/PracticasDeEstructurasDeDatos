@@ -18,11 +18,15 @@ int main() {
 
         switch (opcion) {
             case 1: {
-              
                 string nombre;
-                int edad;
-                float calificacion1, calificacion2, calificacion3;
-                float promedio;
+                int edad, numCalificaciones;
+                float calificacion, sumaCalificaciones = 0.0, promedio;
+                
+                
+                int aprobatorias = 0, reprobatorias = 0;
+                float maxCalificacion = -1.0; 
+                float minCalificacion = 11.0; 
+                bool errorEnCalificacion = false;
                 
                 cout << "\nIngresa el nombre del estudiante: ";
                 getline(cin >> ws, nombre); 
@@ -32,24 +36,55 @@ int main() {
 
                 if (edad < 0 || edad > 120) {
                     cout << "Error: Edad invalida." << endl;
-                    break; 
+                    break;
                 }
 
-                cout << "Ingresa la primera calificacion (0-10): ";
-                cin >> calificacion1;
-                cout << "Ingresa la segunda calificacion (0-10): ";
-                cin >> calificacion2;
-                cout << "Ingresa la tercera calificacion (0-10): ";
-                cin >> calificacion3;
                 
-                if (calificacion1 < 0 || calificacion1 > 10 ||
-                    calificacion2 < 0 || calificacion2 > 10 ||
-                    calificacion3 < 0 || calificacion3 > 10) {
-                    cout << "Error: Las calificaciones deben estar entre 0 y 10." << endl;
+                cout << "¿Cuantas calificaciones deseas registrar?: ";
+                cin >> numCalificaciones;
+
+                if (numCalificaciones <= 0) {
+                    cout << "Error: Debes registrar al menos 1 calificacion." << endl;
+                    break;
+                }
+
+                
+                for (int i = 1; i <= numCalificaciones; i++) {
+                    cout << "Ingresa la calificacion " << i << " (0-10): ";
+                    cin >> calificacion;
+                    
+                    if (calificacion < 0 || calificacion > 10) {
+                        cout << "Error: Las calificaciones deben estar entre 0 y 10." << endl;
+                        errorEnCalificacion = true;
+                        break; 
+                    }
+
+                   
+                    sumaCalificaciones += calificacion;
+
+                   
+                    if (calificacion >= 6) {
+                        aprobatorias++;
+                    } else {
+                        reprobatorias++;
+                    }
+
+                    
+                    if (calificacion > maxCalificacion) {
+                        maxCalificacion = calificacion;
+                    }
+                    if (calificacion < minCalificacion) {
+                        minCalificacion = calificacion;
+                    }
+                }
+
+                
+                if (errorEnCalificacion) {
                     break; 
                 }
 
-                promedio = (calificacion1 + calificacion2 + calificacion3) / 3.0;
+               
+                promedio = sumaCalificaciones / numCalificaciones;
                 
                 string estado;
                 if (promedio >= 9) {
@@ -62,19 +97,24 @@ int main() {
                     estado = "REPROBADO";
                 }
 
+               
                 cout << "\n--- RESUMEN DEL ESTUDIANTE ---" << endl;
                 cout << "Nombre: " << nombre << endl;
                 cout << "Edad: " << edad << " anos" << endl;
                 cout << "Promedio: " << promedio << endl;
                 cout << "Estado: " << estado << endl;
+                cout << "Calificacion mas alta: " << maxCalificacion << endl;
+                cout << "Calificacion mas baja: " << minCalificacion << endl;
+                cout << "Calificaciones aprobatorias: " << aprobatorias << endl;
+                cout << "Calificaciones reprobatorias: " << reprobatorias << endl;
                 
                 break;
             }
             case 2:
                 cout << "\n--- INFORMACION DEL PROGRAMA ---" << endl;
-                cout << "Programa  diseñado para registrar datos de estudiantes," << endl;
+                cout << "Programa disenado para registrar datos de estudiantes," << endl;
                 cout << "calcular promedios y determinar el estado academico." << endl;
-                cout << "Version: 1.0" << endl;
+                cout << "Version: 1.1 (Soporte dinamico de N calificaciones)" << endl;
                 break;
                 
             case 3:
